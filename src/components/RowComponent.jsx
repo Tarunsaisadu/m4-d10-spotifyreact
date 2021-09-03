@@ -1,11 +1,11 @@
-import { Row, Col, Form } from "react-bootstrap";
 import SingleCard from "./SingleCard";
 import React from "react";
+import { Row, Col } from "react-bootstrap";
 
 class RowComponent extends React.Component {
   state = {
     data: [],
-    Loading: false,
+    Loading: true,
   };
   componentDidMount = async () => {
     try {
@@ -14,10 +14,11 @@ class RowComponent extends React.Component {
       );
 
       if (response.ok) {
-        let music_json = await response.json();
-        console.log(music_json.data[0]);
-        console.log(music_json.data.album.cover);
-        this.setState({ data: music_json });
+        //    👇🏻  this is inside of response.json
+        // you need to destructure or access  as music_json.data
+        let { data } = await response.json();
+
+        this.setState({ data, Loading: false });
       } else {
         console.log("error");
       }
@@ -30,7 +31,7 @@ class RowComponent extends React.Component {
     console.log(this.state.data);
     return (
       this.state.data &&
-      !this.state.loading && (
+      !this.state.Loading && (
         <div>
           {
             <Row xs={1} md={4} lg={6} xl={8} className="mx-2">
